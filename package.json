@@ -1,0 +1,23 @@
+{
+  "name": "cleanup",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "bin": "./index.js",
+  "dependencies": {
+    "JSONPath": "^0.11.2",
+    "bluebird": "^3.3.1",
+    "chalk": "^1.1.1",
+    "elegant-spinner": "^1.0.1",
+    "humanize": "^0.0.9",
+    "log-symbols": "^1.0.2",
+    "log-update": "^1.0.2",
+    "plex-api": "^3.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Xiaoxin <javascript@yahoo.com>",
+  "license": "MIT"
+}

@@ -12,7 +12,7 @@
     "humanize": "^0.0.9",
     "log-symbols": "^1.0.2",
     "log-update": "^1.0.2",
-    "plex-api": "^3.3.0"
+    "plex-api": "hyperlink/node-plex-api#add-managed-users-support"
   },
   "devDependencies": {},
   "scripts": {

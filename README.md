@@ -29,7 +29,11 @@ Example:
   "plex": {
     "hostname": "127.0.0.1",
     "username": "<Your Username>",
-    "password": "<Your Password>"
+    "password": "<Your Password>",
+    "homeUser": {    // Required for Plex managed users
+    	"name": "Family",
+    	"pin": "1234" // Optional four digit pin code if user is protected
+    }
   },
   "dnd": [
     "/Volumes/SavedTVShows",
@@ -41,7 +45,7 @@ Example:
 ```
 
 * `plex.hostname` is **required**
-* `plex.username` and `plex.password` are required if you have [Plex Home](https://support.plex.tv/hc/en-us/sections/200641063) enabled
+* `plex.username`, `plex.password` and `plex.homeUser` are required if you have [Plex Home](https://support.plex.tv/hc/en-us/sections/200641063) enabled
 * `dnd` is optional *Do Not Delete* whitelist of dir path or file names
 
 ## Usage

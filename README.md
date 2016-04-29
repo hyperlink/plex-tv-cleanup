@@ -30,9 +30,9 @@ Example:
     "hostname": "127.0.0.1",
     "username": "<Your Username>",
     "password": "<Your Password>",
-    "homeUser": {    // Required for Plex managed users
+    "homeUser": {
     	"name": "Family",
-    	"pin": "1234" // Optional four digit pin code if user is protected
+    	"pin": "1234"
     }
   },
   "dnd": [

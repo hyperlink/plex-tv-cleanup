@@ -8,9 +8,9 @@
     "TV Shows"
   ],
   "bugs": "https://github.com/hyperlink/plex-tv-cleanup/issues",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/hyperlink/plex-tv-cleanup.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hyperlink/plex-tv-cleanup.git"
   },
   "main": "index.js",
   "bin": "./index.js",
@@ -24,9 +24,11 @@
     "log-update": "^1.0.2",
     "plex-api": "hyperlink/node-plex-api#add-managed-users-support"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "standard": "^8.6.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "standard"
   },
   "author": "Xiaoxin <javascript@yahoo.com>",
   "license": "MIT"

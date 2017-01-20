@@ -8,6 +8,8 @@ NodeJs script to delete watched TV episodes from Plex. You can configure a white
 * Performs a refresh of the TV section
 * Shows how much space was recovered
 
+[![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+
 ## Installation
 
 ### Step 1

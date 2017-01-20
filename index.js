@@ -23,6 +23,11 @@ try {
 	return
 }
 
+if (config.plex.homeUser) {
+	console.warn(`${logSymbols.warning} homeUser has been renamed to managedUser please update your config.`)
+	config.plex.managedUser = config.plex.homeUser;
+}
+
 const dnd    = config.dnd
 const client = new PlexAPI(config.plex)
 

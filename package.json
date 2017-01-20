@@ -1,7 +1,12 @@
 {
   "name": "plex-tv-cleanup",
-  "version": "0.1.1",
-  "description": "",
+  "version": "0.1.2",
+  "description": "Automatially deletes watched TV episodes from Plex Media Server",
+  "keywords": [
+    "plex",
+    "PMS",
+    "TV Shows"
+  ],
   "bugs": "https://github.com/hyperlink/plex-tv-cleanup/issues",
   "repository" : {
     "type" : "git",

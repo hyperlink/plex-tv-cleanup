@@ -1,6 +1,6 @@
 {
   "name": "plex-tv-cleanup",
-  "version": "0.1.2",
+  "version": "0.0.0-development",
   "description": "Automatially deletes watched TV episodes from Plex Media Server",
   "keywords": [
     "plex",
@@ -25,11 +25,20 @@
     "plex-api": "hyperlink/node-plex-api#add-managed-users-support"
   },
   "devDependencies": {
+    "commitizen": "^2.9.5",
+    "cz-conventional-changelog": "^1.2.0",
+    "semantic-release": "^6.3.2",
     "standard": "^8.6.0"
   },
   "scripts": {
-    "test": "standard"
+    "test": "standard",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "author": "Xiaoxin <javascript@yahoo.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }

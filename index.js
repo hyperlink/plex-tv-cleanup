@@ -32,6 +32,7 @@ const dnd = config.dnd
 const client = new PlexAPI(config.plex)
 
 let spinnerIntervalId = null
+
 function startSpinner () {
   spinnerIntervalId = setInterval(() => logUpdate(frame()), 50)
 }
@@ -41,57 +42,67 @@ function stopSpinner () {
   logUpdate('')
 }
 
-let dryRun = process.argv.slice(2).some(arg => arg === '--dry-run')
+const dryRun = process.argv.slice(2).some(arg => arg === '--dry-run')
 
-let televisionSection, totalBytes, totalEpisodes
+Promise.coroutine(function* () {
+  if (dryRun) {
+    console.log(logSymbols.info, 'Dry Run')
+  }
 
-client.find('/library/sections', {type: 'show'}).then(result => {
-  if (result.length > 1) {
+  const tvSections = yield client.find('/library/sections', {type: 'show'})
+
+  if (tvSections.length > 1) {
     throw new Error('Multiple TV sections found.')
   }
 
-  if (result.length === 0) {
+  if (tvSections.length === 0) {
     throw new Error('No TV sections were found.')
   }
 
-  televisionSection = result[0].uri
+  const televisionSection = tvSections[0].uri
   console.log(`TV URI : ${televisionSection}`)
-  let allShows = path.join(result[0].uri, 'allLeaves')
-  return client.find(allShows)
-})
-  .then(result => {
-    let viewed = ep => ep.viewCount
-    let viewedEpisodes = result.filter(viewed)
-    let filesToDelete = JSONPath({json: viewedEpisodes, path: '$..file', resultType: 'parent'}).filter(ep => !ignore(ep.file))
 
-    filesToDelete.forEach(ep => console.log(' %s %s | %s', logSymbols.info, path.basename(ep.file), chalk.green(humanize.filesize(ep.size))))
+  const allShows = path.join(televisionSection, 'allLeaves')
 
-    totalBytes = filesToDelete.reduce((prev, ep) => prev + ep.size, 0)
-    totalEpisodes = filesToDelete.length
+  const viewed = ep => ep.viewCount
 
-    startSpinner()
+  const allEpisodes = yield client.find(allShows)
+  const viewedEpisodes = allEpisodes.filter(viewed)
 
-    if (dryRun) {
-      console.log(logSymbols.info, 'Dry Run')
-      return []
+  const filesToDelete = JSONPath({json: viewedEpisodes, path: '$..file', resultType: 'parent'}).filter(ep => !ignore(ep.file))
+
+  filesToDelete.forEach(ep => console.log(' %s %s | %s', logSymbols.info, path.basename(ep.file), chalk.green(humanize.filesize(ep.size))))
+
+  const totalBytes = filesToDelete.reduce((prev, ep) => prev + ep.size, 0)
+  const totalEpisodes = filesToDelete.length
+
+  startSpinner()
+
+  if (!dryRun) {
+    try {
+      yield Promise.map(filesToDelete, ep => fs.unlinkAsync(decodeURIComponent(ep.file)), {concurrency: 10})
+      // yield Promise.all(filesToDelete.map(ep => fs.unlinkAsync(decodeURIComponent(ep.file))))
+      yield client.perform(path.join(televisionSection, 'refresh'))
+    } catch (err) {
+      console.error('Delete failed', err)
     }
-    return filesToDelete
-  })
-  .then(files => Promise.all(files.map(ep => fs.unlinkAsync(decodeURIComponent(ep.file)))))
-  .then(() => dryRun ? true : client.perform(path.join(televisionSection, 'refresh')), err => console.error('Delete failed', err))
-  .then(stopSpinner)
-  .catch(err => console.error(logSymbols.error, 'Could not connect to server', err))
-  .then(displaySummary)
-
-function displaySummary () {
-  let wouldBe = dryRun ? chalk.yellow(' (would be)') : ''
-  console.log('%s Total%s deleted: %d episodes', logSymbols.success, wouldBe, totalEpisodes)
-  console.log('%s Space%s recovered: %s', logSymbols.success, wouldBe, chalk.green(humanize.filesize(totalBytes)))
-}
-
-function ignore (filepath) {
-  if (dnd == null) {
-    return false
   }
-  return dnd.some(show => ~filepath.toLowerCase().indexOf(show.toLowerCase()))
-}
+
+  stopSpinner()
+
+  displaySummary()
+
+  function displaySummary () {
+    const wouldBe = dryRun ? chalk.yellow(' (would be)') : ''
+    console.log('%s Total%s deleted: %d episodes', logSymbols.success, wouldBe, totalEpisodes)
+    console.log('%s Space%s recovered: %s', logSymbols.success, wouldBe, chalk.green(humanize.filesize(totalBytes)))
+  }
+
+  function ignore (filepath) {
+    if (dnd == null) {
+      return false
+    }
+    return dnd.some(show => ~filepath.toLowerCase().indexOf(show.toLowerCase()))
+  }
+})()
+.catch(error => console.error(error))

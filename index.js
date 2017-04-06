@@ -44,7 +44,7 @@ function stopSpinner () {
 
 const dryRun = process.argv.slice(2).some(arg => arg === '--dry-run')
 
-Promise.coroutine(function* () {
+Promise.coroutine(function * () {
   if (dryRun) {
     console.log(logSymbols.info, 'Dry Run')
   }

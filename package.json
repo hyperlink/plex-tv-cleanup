@@ -21,7 +21,7 @@
     "elegant-spinner": "^1.0.1",
     "humanize": "^0.0.9",
     "log-symbols": "^1.0.2",
-    "log-update": "^1.0.2",
+    "log-update": "^2.0.0",
     "plex-api": "hyperlink/node-plex-api#add-managed-users-support"
   },
   "devDependencies": {

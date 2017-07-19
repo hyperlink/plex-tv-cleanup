@@ -20,7 +20,7 @@
     "chalk": "^2.0.0",
     "elegant-spinner": "^1.0.1",
     "humanize": "^0.0.9",
-    "log-symbols": "^1.0.2",
+    "log-symbols": "^2.0.0",
     "log-update": "^1.0.2",
     "plex-api": "hyperlink/node-plex-api#add-managed-users-support"
   },

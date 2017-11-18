@@ -44,32 +44,31 @@ function stopSpinner () {
 
 const dryRun = process.argv.slice(2).some(arg => arg === '--dry-run')
 
-Promise.coroutine(function * () {
-  if (dryRun) {
-    console.log(logSymbols.info, 'Dry Run')
-  }
+const getWatchedShows = Promise.coroutine(function * (section) {
+  console.log(`TV URI : ${section}`)
 
-  const tvSections = yield client.find('/library/sections', {type: 'show'})
-
-  if (tvSections.length > 1) {
-    throw new Error('Multiple TV sections found.')
-  }
-
-  if (tvSections.length === 0) {
-    throw new Error('No TV sections were found.')
-  }
-
-  const televisionSection = tvSections[0].uri
-  console.log(`TV URI : ${televisionSection}`)
-
-  const allShows = path.join(televisionSection, 'allLeaves')
+  const allShows = path.join(section, 'allLeaves')
 
   const viewed = ep => ep.viewCount
 
   const allEpisodes = yield client.find(allShows)
   const viewedEpisodes = allEpisodes.filter(viewed)
 
-  const filesToDelete = JSONPath({json: viewedEpisodes, path: '$..file', resultType: 'parent'}).filter(ep => !ignore(ep.file))
+  return JSONPath({json: viewedEpisodes, path: '$..file', resultType: 'parent'}).filter(ep => !ignore(ep.file))
+})
+
+Promise.coroutine(function * () {
+  if (dryRun) {
+    console.log(logSymbols.info, 'Dry Run')
+  }
+
+  const tvSections = (yield client.find('/library/sections', {type: 'show'})).map(section => section.uri)
+
+  if (tvSections.length === 0) {
+    throw new Error('No TV sections were found.')
+  }
+
+  const filesToDelete = [].concat.apply([], yield Promise.map(tvSections, getWatchedShows))
 
   filesToDelete.forEach(ep => console.log(' %s %s | %s', logSymbols.info, path.basename(ep.file), chalk.green(humanize.filesize(ep.size))))
 
@@ -81,8 +80,7 @@ Promise.coroutine(function * () {
   if (!dryRun) {
     try {
       yield Promise.map(filesToDelete, ep => fs.unlinkAsync(decodeURIComponent(ep.file)), {concurrency: 10})
-      // yield Promise.all(filesToDelete.map(ep => fs.unlinkAsync(decodeURIComponent(ep.file))))
-      yield client.perform(path.join(televisionSection, 'refresh'))
+      yield Promise.map(tvSections, televisionSection => client.perform(path.join(televisionSection, 'refresh')))
     } catch (err) {
       console.error('Delete failed', err)
     }
@@ -97,12 +95,12 @@ Promise.coroutine(function * () {
     console.log('%s Total%s deleted: %d episodes', logSymbols.success, wouldBe, totalEpisodes)
     console.log('%s Space%s recovered: %s', logSymbols.success, wouldBe, chalk.green(humanize.filesize(totalBytes)))
   }
-
-  function ignore (filepath) {
-    if (dnd == null) {
-      return false
-    }
-    return dnd.some(show => ~filepath.toLowerCase().indexOf(show.toLowerCase()))
-  }
 })()
 .catch(error => console.error(error))
+
+function ignore (filepath) {
+  if (dnd == null) {
+    return false
+  }
+  return dnd.some(show => ~filepath.toLowerCase().indexOf(show.toLowerCase()))
+}

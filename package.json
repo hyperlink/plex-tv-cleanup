@@ -25,7 +25,7 @@
     "plex-api": "hyperlink/node-plex-api#add-managed-users-support"
   },
   "devDependencies": {
-    "commitizen": "^2.9.5",
+    "commitizen": "^3.0.3",
     "cz-conventional-changelog": "^1.2.0",
     "semantic-release": "^7.0.1",
     "standard": "^10.0.1"

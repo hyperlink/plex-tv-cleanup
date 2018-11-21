@@ -32,6 +32,7 @@ Example:
     "hostname": "127.0.0.1",
     "username": "<Your Username>",
     "password": "<Your Password>",
+    "serverName": "Mac Mini",
     "managedUser": {
     	"name": "Family",
     	"pin": "1234"
@@ -47,6 +48,7 @@ Example:
 ```
 
 * `plex.hostname` is **required**
+* `plex.serverName` is required if using managedUser and having multiple plex servers
 * `plex.username`, `plex.password` and `plex.managedUser` are required if you have [Plex Home](https://support.plex.tv/hc/en-us/sections/200641063) enabled
 * `dnd` is optional *Do Not Delete* whitelist of dir path or file names
 

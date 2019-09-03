@@ -21,7 +21,7 @@
     "elegant-spinner": "^1.0.1",
     "humanize": "^0.0.9",
     "log-symbols": "^2.0.0",
-    "log-update": "^1.0.2",
+    "log-update": "^3.3.0",
     "@hyperlink/plex-api": "^3.6.0"
   },
   "devDependencies": {

@@ -15,14 +15,14 @@
   "main": "index.js",
   "bin": "./index.js",
   "dependencies": {
+    "@hyperlink/plex-api": "^3.6.0",
     "JSONPath": "^0.11.2",
-    "bluebird": "^3.3.1",
-    "chalk": "^2.0.0",
+    "bluebird": "^3.7.2",
+    "chalk": "^2.4.2",
     "elegant-spinner": "^1.0.1",
     "humanize": "^0.0.9",
     "log-symbols": "^2.0.0",
-    "log-update": "^1.0.2",
-    "@hyperlink/plex-api": "^3.6.0"
+    "log-update": "^1.0.2"
   },
   "devDependencies": {
     "commitizen": "^2.9.5",

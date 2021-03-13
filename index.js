@@ -35,7 +35,7 @@ if (config.plex.homeUser) {
 
 const dnd = config.dnd
 const client = new PlexAPI({
-  ... config.plex,
+  ...config.plex,
   options: {
     identifier: 'plex-tv-cleanup',
     product: 'Plex TV Cleanup'

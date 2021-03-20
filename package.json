@@ -27,7 +27,7 @@
   "devDependencies": {
     "commitizen": "^2.9.5",
     "cz-conventional-changelog": "^1.2.0",
-    "semantic-release": "^7.0.1",
+    "semantic-release": "^8.0.1",
     "standard": "^10.0.1"
   },
   "scripts": {
